@@ -1,17 +1,968 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sai Portfolio</title>
-    <!-- (Optional for dev) Tailwind via CDN just to confirm styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <!-- 🔴 THIS IS THE MISSING PIECE -->
-    <div id="root"></div>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sai Mohan Raja Reddy — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #7c6fff;
+    --accent2: #ff6b6b;
+    --accent3: #00d4aa;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --tag-bg: #1e1e2e;
+  }
 
-    <!-- Load your React app -->
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* ── GRADIENT ORBS ── */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+  }
+  .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; right: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--accent3); bottom: 10%; left: -100px; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10,10,15,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-inner { max-width: 760px; }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent3);
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(48px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -3px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  h1 .line2 { color: var(--accent); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { background: #9585ff; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 2px;
+  }
+
+  /* ── CONTAINER ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 40px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+  }
+
+  /* ── ABOUT ── */
+  #about { padding: 120px 0; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 16px;
+    line-height: 1.8;
+    font-size: 15px;
+  }
+
+  .about-text p strong { color: var(--text); font-weight: 500; }
+
+  .skills-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .skill-group-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .skill-tag {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── PROJECTS ── */
+  #projects { padding: 120px 0; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(124, 111, 255, 0.1);
+  }
+  .project-card:hover::before { opacity: 1; }
+
+  .project-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .project-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .project-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+  }
+
+  .project-desc {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .project-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .tech-tag {
+    background: rgba(124, 111, 255, 0.08);
+    border: 1px solid rgba(124, 111, 255, 0.2);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .tech-tag.green {
+    background: rgba(0, 212, 170, 0.08);
+    border-color: rgba(0, 212, 170, 0.2);
+    color: var(--accent3);
+  }
+
+  .tech-tag.red {
+    background: rgba(255, 107, 107, 0.08);
+    border-color: rgba(255, 107, 107, 0.2);
+    color: var(--accent2);
+  }
+
+  .project-links {
+    display: flex;
+    gap: 12px;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .project-link:hover { color: var(--accent); border-color: var(--accent); }
+
+  .project-card.featured .project-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .featured-badge {
+    background: linear-gradient(135deg, var(--accent), #a593ff);
+    color: white;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 5px 12px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── EXPERIENCE ── */
+  #experience { padding: 120px 0; }
+
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 48px;
+    padding-left: 24px;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .timeline-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent3);
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+  }
+
+  .timeline-role {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: -0.3px;
+  }
+
+  .timeline-org {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .timeline-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .timeline-points li {
+    font-size: 14px;
+    color: var(--muted);
+    padding-left: 16px;
+    position: relative;
+    line-height: 1.6;
+  }
+  .timeline-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 12px;
+  }
+
+  /* ── CERTIFICATIONS ── */
+  #certifications { padding: 80px 0 120px; }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.2s;
+  }
+  .cert-card:hover { border-color: var(--accent3); }
+
+  .cert-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--tag-bg);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .cert-name {
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .cert-issuer {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    padding: 120px 0;
+    text-align: center;
+  }
+
+  .contact-inner { max-width: 600px; margin: 0 auto; }
+
+  .contact-inner .section-label { justify-content: center; }
+  .contact-inner .section-label::after { display: none; }
+
+  .contact-desc {
+    color: var(--muted);
+    margin: 20px 0 40px;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-family: 'DM Mono', monospace;
+    transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); background: rgba(124,111,255,0.05); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  footer p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 100px 24px 60px; }
+    .container { padding: 0 24px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-template-columns: 1fr; }
+    .project-card.featured .project-meta { align-items: flex-start; }
+    footer { flex-direction: column; gap: 12px; text-align: center; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SMR<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">about</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#experience">experience</a></li>
+    <li><a href="#certifications">certs</a></li>
+    <li><a href="#contact">contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Available for full-time roles · F-1 OPT</div>
+    <h1>
+      Sai Mohan<br>
+      <span class="line2">Raja Reddy</span>
+    </h1>
+    <p class="hero-sub">
+      AI & Automation Engineer building production LLM systems, RAG pipelines, and intelligent workflows. MS Computer Science · St. Louis, MO.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn-primary">View Projects ↓</a>
+      <a href="https://linkedin.com/in/saimohanrajareddy" target="_blank" class="btn-secondary">LinkedIn ↗</a>
+      <a href="https://github.com/saimohanrajareddy" target="_blank" class="btn-secondary">GitHub ↗</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">1K+</div>
+        <div class="stat-label">monthly chatbot users</div>
+      </div>
+      <div>
+        <div class="stat-num">5+</div>
+        <div class="stat-label">production projects</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">certifications</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">01 — About</div>
+      <h2 class="section-title">Who I Am</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>I'm an AI & Automation Engineer with a passion for building systems that connect <strong>large language models, vector databases, and workflow automation</strong> into production-ready products.</p>
+        <p>My flagship project is a <strong>production AI chatbot</strong> serving 1,000+ monthly users for a restaurant client — built with OpenAI GPT-4, Pinecone, and n8n. Currently scaling it into a multi-tenant SaaS platform.</p>
+        <p>I recently completed my <strong>MS in Computer Science</strong> from University of Central Missouri and hold an AWS Cloud Practitioner certification. I'm currently on F-1 OPT status and open to full-time opportunities in AI, automation, and software engineering.</p>
+      </div>
+      <div class="skills-grid reveal">
+        <div>
+          <div class="skill-group-label">AI / LLM</div>
+          <div class="skill-tags">
+            <span class="skill-tag">OpenAI GPT-4</span>
+            <span class="skill-tag">LangChain</span>
+            <span class="skill-tag">Pinecone</span>
+            <span class="skill-tag">RAG Pipelines</span>
+            <span class="skill-tag">Prompt Engineering</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Automation</div>
+          <div class="skill-tags">
+            <span class="skill-tag">n8n</span>
+            <span class="skill-tag">REST APIs</span>
+            <span class="skill-tag">Webhooks</span>
+            <span class="skill-tag">Google Apps Script</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Languages & Frameworks</div>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Flask</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">SQL</span>
+          </div>
+        </div>
+        <div>
+          <div class="skill-group-label">Cloud & Data</div>
+          <div class="skill-tags">
+            <span class="skill-tag">AWS Lambda</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">MongoDB</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">Git</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">02 — Projects</div>
+      <h2 class="section-title">What I've Built</h2>
+    </div>
+    <div class="projects-grid">
+
+      <!-- FEATURED: AI Chatbot -->
+      <div class="project-card featured reveal">
+        <div class="project-content">
+          <div class="project-number">01 · Featured</div>
+          <div class="project-name">AI Knowledgebase & RAG Pipeline</div>
+          <p class="project-desc">
+            End-to-end AI chatbot for a restaurant client serving 1,000+ monthly users. Built a complete RAG system with Pinecone vector database for semantic search across 200+ embedded documents, automated metadata extraction with n8n, and multi-tenant architecture for scaling to multiple clients.
+          </p>
+          <div class="project-tech">
+            <span class="tech-tag">n8n</span>
+            <span class="tech-tag">OpenAI GPT-4</span>
+            <span class="tech-tag">Pinecone</span>
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">JavaScript</span>
+            <span class="tech-tag">PostgreSQL</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/saimohanrajareddy" target="_blank" class="project-link">↗ GitHub</a>
+          </div>
+        </div>
+        <div class="project-meta">
+          <span class="featured-badge">⚡ Production</span>
+        </div>
+      </div>
+
+      <!-- SmartMealPlanner -->
+      <div class="project-card reveal">
+        <div class="project-number">02</div>
+        <div class="project-name">SmartMealPlanner</div>
+        <p class="project-desc">
+          Full-stack meal planning app with role-based dashboards, weekly nutrition tracking, and meal logs. Features user authentication, a meal calendar view, dietary preference filtering, and save/favorite recipes — all backed by a clean REST API and deployed on AWS EC2.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag green">Flask</span>
+          <span class="tech-tag green">MongoDB</span>
+          <span class="tech-tag green">Python</span>
+          <span class="tech-tag green">AWS EC2</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/saimohanrajareddy" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+
+      <!-- Restaurant Grocery Automation -->
+      <div class="project-card reveal">
+        <div class="project-number">03</div>
+        <div class="project-name">Restaurant Grocery Automation</div>
+        <p class="project-desc">
+          Automated receipt scanning and categorized cost tracking system. Scans receipts, extracts line items, categorizes grocery costs, and syncs everything into Google Sheets using n8n workflows and Gmail API integration.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag">n8n</span>
+          <span class="tech-tag">Google Sheets API</span>
+          <span class="tech-tag">Gmail API</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/saimohanrajareddy" target="_blank" class="project-link">↗ Workflow</a>
+        </div>
+      </div>
+
+      <!-- Cricket Club -->
+      <div class="project-card reveal">
+        <div class="project-number">04</div>
+        <div class="project-name">Cricket Club Management System</div>
+        <p class="project-desc">
+          Full-stack club management platform with MongoDB collections for Players, Teams, Matches, and Venues. Features admin dashboards, database indexes for performance, and role-based permissions for secure data access.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag red">Python</span>
+          <span class="tech-tag red">Flask</span>
+          <span class="tech-tag red">MongoDB</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/saimohanrajareddy" target="_blank" class="project-link">↗ Source</a>
+        </div>
+      </div>
+
+      <!-- Course Enrollment -->
+      <div class="project-card reveal">
+        <div class="project-number">05</div>
+        <div class="project-name">Course Enrollment (AWS Cloud)</div>
+        <p class="project-desc">
+          React + Node.js app deployed on AWS EC2 with PostgreSQL (RDS) for persistent storage, Lambda functions for serverless processing, SES for automated email notifications, and CloudWatch for monitoring and logs.
+        </p>
+        <div class="project-tech">
+          <span class="tech-tag green">React</span>
+          <span class="tech-tag green">Node.js</span>
+          <span class="tech-tag green">AWS Lambda</span>
+          <span class="tech-tag green">RDS</span>
+          <span class="tech-tag green">SES</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/saimohanrajareddy" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">03 — Experience</div>
+      <h2 class="section-title">Where I've Worked</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <div class="timeline-date">OCT 2024 — PRESENT</div>
+        <div class="timeline-role">AI Automation Engineer</div>
+        <div class="timeline-org">Restaurant Client · Contract · St. Louis, MO</div>
+        <ul class="timeline-points">
+          <li>Architected production RAG chatbot serving 1,000+ monthly users with 92% satisfaction rate</li>
+          <li>Built Pinecone vector database pipeline for semantic search across 200+ embedded documents</li>
+          <li>Automated metadata extraction and classification with n8n, OAuth, and webhook integrations</li>
+          <li>Designing multi-tenant SaaS architecture for scaling to multiple restaurant clients</li>
+        </ul>
+      </div>
+      <div class="timeline-item reveal">
+        <div class="timeline-date">2022 — 2023</div>
+        <div class="timeline-role">Assistant Placement Coordinator</div>
+        <div class="timeline-org">Brilliant Institute of Engineering and Technology (JNTUH) · India</div>
+        <ul class="timeline-points">
+          <li>Coordinated placement activities between 200+ students and 50+ recruiting companies</li>
+          <li>Built automated reporting tools with Google Apps Script, reducing manual work by 40%</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">04 — Certifications</div>
+      <h2 class="section-title">Credentials</h2>
+    </div>
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">☁️</div>
+        <div>
+          <div class="cert-name">AWS Certified Cloud Practitioner</div>
+          <div class="cert-issuer">Amazon Web Services · CLF-C02 · Oct 2023</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🤖</div>
+        <div>
+          <div class="cert-name">Build AI Agents & Automate Workflows with n8n</div>
+          <div class="cert-issuer">LinkedIn Learning · Feb 2026</div>
+        </div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🎓</div>
+        <div>
+          <div class="cert-name">MS Computer Science</div>
+          <div class="cert-issuer">University of Central Missouri · Dec 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner reveal">
+      <div class="section-label">05 — Contact</div>
+      <h2 class="section-title">Let's Connect</h2>
+      <p class="contact-desc">
+        I'm actively looking for full-time roles in AI engineering, automation, and software development. Open to relocation. Currently on F-1 OPT (EAD pending).
+      </p>
+      <div class="contact-links">
+        <a href="mailto:saimohanrajareddyjannareddy@gmail.com" class="contact-link">✉ Email</a>
+        <a href="https://linkedin.com/in/saimohanrajareddy" target="_blank" class="contact-link">in LinkedIn</a>
+        <a href="https://github.com/saimohanrajareddy" target="_blank" class="contact-link">⌥ GitHub</a>
+        <a href="https://saimohanrajareddy.com" target="_blank" class="contact-link">↗ Portfolio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Sai Mohan Raja Reddy Janna Reddy</p>
+  <p>Built with HTML · CSS · JS</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
 </html>
